@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "alert_rules.yml"
+
+scrape_configs:
+  # Job 1: O próprio Prometheus
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Job 2: A nossa aplicação E-Fecaf
+  - job_name: 'efecaf_app'
+    static_configs:
+      - targets: ['efecaf_app:8080']

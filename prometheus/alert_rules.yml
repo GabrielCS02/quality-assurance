@@ -1,0 +1,22 @@
+groups:
+  - name: efecaf_alerts
+    rules:
+      # Alerta de Lentidão no Checkout (Latência superior a 1 segundo)
+      - alert: AltaLatenciaCheckout
+        expr: rate(http_request_duration_seconds_sum{endpoint="/checkout"}[1m]) / rate(http_request_duration_seconds_count{endpoint="/checkout"}[1m]) > 1.0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Lentidão detetada no Checkout"
+          description: "O tempo médio de resposta do checkout ultrapassou 1 segundo no último minuto."
+
+      # Alerta de Erros Críticos (Erros HTTP 500)
+      - alert: TaxaErrosCritica
+        expr: rate(http_requests_total{http_status="500"}[1m]) > 0.5
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Falhas no servidor detetadas"
+          description: "A taxa de erros 500 no checkout atingiu níveis críticos."
